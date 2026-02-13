@@ -112,8 +112,6 @@ export default {
     const lastFetch = await env.KV.get('lastFetch') ?? 0;
     const current = Math.floor((Date.now()) / 1000);
 
-    console.log(`last: ${lastFetch} / now: ${current}`);
-
     if ( current - lastFetch <= 30 ) {
       return Response.json({
         message: 'rate limit'
@@ -135,8 +133,6 @@ export default {
 
   async queue( batch, env, ctx ) {
     for (const message of batch.messages) {
-      console.log( `queue triggered: ${message.body.id}`);
-
       ctx.waitUntil( savePost(message.body.id) );
     }
   }
