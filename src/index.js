@@ -12,6 +12,14 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+const savePost = async ( postId ) => {
+  const api = `https://cms.jirayu.in.th/wp-json/wp/v2/posts/${postId}`;
+  const response = await fetch( api );
+  const data = await response.json();
+
+  console.log(`fetch ${postId} - data.title`);
+}
+
 export default {
   async fetch(req) {
     const url = new URL(req.url)
@@ -33,45 +41,24 @@ export default {
     }
 
     const postList = await response.json();
-
     const messages = postList.map( (post) => {
       return {
-        id: post.id,
-        text: 'hello world'
+        body: post
       }
     });
 
     await env.SYNC_QUEUE.sendBatch( messages );
 
-    // postList.forEach( async (post) => {
-    //   console.log('prep');
-
-    //   try {
-    //     console.log('sending');
-
-    //     const payload = {
-    //       id: post.id,
-    //       text: 'hello world'
-    //     }
-
-    //     await env.SYNC_QUEUE.send(payload);
-
-    //     console.log(`payload: ${JSON.stringify(payload)}`);
-    //   } catch (e) {
-    //     const message = e instanceof Error ? e.message : "Unknown error";
-
-    //     console.error(`failed to send to the queue: ${message}`);
-    //   }
-
-    //   // ctx.waitUntil(env.QUEUE.send(post));
-    // });
-
-    console.log(`data sent to queue`);
+    console.log(`data sent to queue: ${JSON.stringify(postList)}`);
   },
 
   async queue( batch, env, ctx ) {
     for (const message of batch.messages) {
-      console.log( `queue triggered: ${JSON.stringify(message.body)}`);
+      console.log( `queue triggered: ${message.body.id}`);
+
+      const url = `${baseUrl}/${message.body.id}`;
+
+      ctx.waitUntil( savePost(message.body.id) );
     }
   }
 };
