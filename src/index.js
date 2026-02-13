@@ -104,6 +104,8 @@ const savePost = async ( postId ) => {
   const response = await fetch( api );
   const data = await response.json();
 
+  console.log(postId);
+
   const statement = env.DB.prepare('SELECT ID, modified from `web_posts` WHERE `ID` = ?').bind(postId);
   const row = await statement.first();
 
