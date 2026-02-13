@@ -25,7 +25,7 @@ export default {
 	async scheduled(event, env, ctx) {
 		const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
 		console.log( url );
-		const response = await this.fetch(url);
+		const response = await fetch(url);
 
 		if ( !response.ok ) {
 			console.log('Failed to retrieve post list');
