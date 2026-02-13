@@ -30,7 +30,7 @@
       {
         "binding": "QUEUE",
         "queue": "blog-sync",
-        "delivery_delay": 5 // Delay messages by 60 seconds before they are delivered to a consumer
+        "delivery_delay": 10
       }
     ]
   }
