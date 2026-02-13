@@ -34,6 +34,8 @@ export default {
 		const postList = await response.json();
 
 		postList.forEach( async (post) => await env.QUEUE.send(post));
+
+		console.log(`data sent to queue: ${JSON.stringify(postList)}`);
 	},
 
 	async queue( batch, env, ctx ) {
