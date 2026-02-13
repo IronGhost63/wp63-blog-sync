@@ -12,7 +12,7 @@
 	},
 	"triggers": {
 		"crons": [
-			"3 * * * *"
+			"*/3 * * * *"
 		]
 	},
 	"compatibility_flags": [
