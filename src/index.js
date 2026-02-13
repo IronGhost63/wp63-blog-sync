@@ -47,7 +47,7 @@ const insertPost = async (post) => {
 
     console.log(`post ${post.id} is inserted`);
   } catch(e) {
-    console.log(`unable to insert: ${JSON.stringify(e)}`)
+    console.log(`unable to insert: ${e.message}`)
   }
 }
 
@@ -73,7 +73,7 @@ const updatePost = async (post) => {
 
     console.log(`post ${post.id} is updated`);
   } catch(e) {
-    console.log(`unable to update: ${JSON.stringify(e)}`)
+    console.log(`unable to update: ${e.message}`)
   }
 }
 
