@@ -43,9 +43,12 @@ export default {
 			}
 
 			try {
-				await env.SYNC_QUEUE.send(payload)
+				console.log('sending');
+
+				await env.SYNC_QUEUE.send(payload);
 			} catch (e) {
 				const message = e instanceof Error ? e.message : "Unknown error";
+
       	console.error(`failed to send to the queue: ${message}`);
 			}
 
