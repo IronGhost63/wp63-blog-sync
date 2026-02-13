@@ -35,8 +35,9 @@
     "consumers": [
       {
         "queue": "blog-sync",
-        "max_batch_size": 3,
-        "dead_letter_queue": "blog-sync-dead"
+        "max_batch_size": 1,
+        "dead_letter_queue": "blog-sync-dead",
+				"max_concurrency": 3
       }
     ]
   },
