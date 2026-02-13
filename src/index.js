@@ -12,6 +12,10 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+const sendToQueue = async () => {
+
+}
+
 const savePost = async ( postId ) => {
   const api = `https://cms.jirayu.in.th/wp-json/wp/v2/posts/${postId}`;
   const response = await fetch( api );
@@ -23,13 +27,11 @@ const savePost = async ( postId ) => {
 export default {
   async fetch(req) {
     const url = new URL(req.url)
-    url.pathname = "/__scheduled";
+    url.pathname = "/__scheduled";s
     url.searchParams.append("cron", "* * * * *");
     return new Response(`To test the scheduled handler, ensure you have used the "--test-scheduled" then try running "curl ${url.href}".`);
   },
 
-  // The scheduled handler is invoked at the interval set in our wrangler.jsonc's
-  // [[triggers]] configuration.
   async scheduled(event, env, ctx) {
     const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
     const response = await fetch(url);
@@ -55,8 +57,6 @@ export default {
   async queue( batch, env, ctx ) {
     for (const message of batch.messages) {
       console.log( `queue triggered: ${message.body.id}`);
-
-      const url = `${baseUrl}/${message.body.id}`;
 
       ctx.waitUntil( savePost(message.body.id) );
     }
