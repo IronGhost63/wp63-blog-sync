@@ -34,7 +34,7 @@ export default {
 
     const postList = await response.json();
 
-    await env.SYNC_QUEUE.bachSend( postList );
+    await env.SYNC_QUEUE.batchSend( postList );
 
     // postList.forEach( async (post) => {
     //   console.log('prep');
