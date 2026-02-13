@@ -36,7 +36,8 @@ export default {
 
 		postList.forEach( async (post) => {
 			await env.QUEUE.send({
-				'text': 'hello world'
+				id: post.id,
+				text: 'hello world'
 			});
 			// ctx.waitUntil(env.QUEUE.send(post));
 		});
