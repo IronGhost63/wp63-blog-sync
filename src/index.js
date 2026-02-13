@@ -17,7 +17,7 @@ const savePost = async ( postId ) => {
   const response = await fetch( api );
   const data = await response.json();
 
-  console.log(`fetch ${postId} - data.title`);
+  console.log(`fetch ${postId} - ${data.title}`);
 }
 
 export default {
