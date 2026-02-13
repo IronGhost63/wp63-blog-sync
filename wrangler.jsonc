@@ -39,7 +39,13 @@
         "dead_letter_queue": "blog-sync-dead"
       }
     ]
-  }
+  },
+	"kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "70f5823ab02d45c6b93f6af91d046ba5"
+    }
+  ]
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

@@ -12,8 +12,28 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-const sendToQueue = async () => {
+import { env } from "cloudflare:workers";
 
+const sendToQueue = async () => {
+  const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
+  const response = await fetch(url);
+
+  if ( !response.ok ) {
+    console.log('Failed to retrieve post list');
+
+    return;
+  }
+
+  const postList = await response.json();
+  const messages = postList.map( (post) => {
+    return {
+      body: post
+    }
+  });
+
+  await env.SYNC_QUEUE.sendBatch( messages );
+
+  console.log(`data sent to queue: ${JSON.stringify(postList)}`);
 }
 
 const savePost = async ( postId ) => {
@@ -21,37 +41,31 @@ const savePost = async ( postId ) => {
   const response = await fetch( api );
   const data = await response.json();
 
-  console.log(`fetch ${postId} - ${data.title}`);
+  console.log(`fetch ${postId} - ${data.title.rendered}`);
 }
 
 export default {
-  async fetch(req) {
-    const url = new URL(req.url)
-    url.pathname = "/__scheduled";s
-    url.searchParams.append("cron", "* * * * *");
-    return new Response(`To test the scheduled handler, ensure you have used the "--test-scheduled" then try running "curl ${url.href}".`);
+  async fetch(req, env, ctx) {
+    const lastFetch = env.KV.get('lastFetch') ?? 0;
+    const current = Math.floor((Date.now()) / 1000);
+
+    if ( current - lastFetch <= 30 ) {
+      return Response.json({
+        message: 'rate limit'
+      });
+    }
+
+    ctx.waitUntil(sendToQueue());
+
+    env.KV.put('lastFetch', current);
+
+    return Response.json({
+      message: 'Sync queued'
+    });
   },
 
   async scheduled(event, env, ctx) {
-    const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
-    const response = await fetch(url);
-
-    if ( !response.ok ) {
-      console.log('Failed to retrieve post list');
-
-      return;
-    }
-
-    const postList = await response.json();
-    const messages = postList.map( (post) => {
-      return {
-        body: post
-      }
-    });
-
-    await env.SYNC_QUEUE.sendBatch( messages );
-
-    console.log(`data sent to queue: ${JSON.stringify(postList)}`);
+    ctx.waitUntil(sendToQueue());
   },
 
   async queue( batch, env, ctx ) {
