@@ -28,8 +28,15 @@
   "queues": {
     "producers": [
       {
-        "binding": "QUEUE",
-        "queue": "blog-sync"
+        "binding": "MY_QUEUE",
+        "queue": "f759f26009654f6abfc45bb81477c9dd"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "f759f26009654f6abfc45bb81477c9dd",
+        "max_batch_size": 10,
+        "dead_letter_queue": "my-queue-dlq"
       }
     ]
   }
