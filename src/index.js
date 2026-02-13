@@ -40,18 +40,7 @@ const insertPost = async (post) => {
   const statement = env.DB.prepare(`
       INSERT INTO web_posts ('id', 'title', 'content', 'slug', 'datetime', 'modified', 'type', 'categories', 'tags', 'excerpt', 'featured_image')
       VALUES (?1, '?2', '?3', '?4', '?5', '?6', '?7', '?8', '?9', '?10', '?11');
-    `)
-      .bind(1, post.id)
-      .bind(2, post.title)
-      .bind(3, post.content)
-      .bind(4, post.slug)
-      .bind(5, post.datetime)
-      .bind(6, post.modified)
-      .bind(7, post.type)
-      .bind(8, post.categories)
-      .bind(9, post.tags)
-      .bind(10, post.excerpt)
-      .bind(11, post.featured_image);
+    `).bind( post.id, post.title, post.content, post.slug, post.datetime, post.modified, post.type, post.categories, post.tags, post.excerpt, post.featured_image );
 
   try {
     const result = await statement.run();
@@ -77,18 +66,7 @@ const updatePost = async (post) => {
         excerpt = '?10',
         featured_image = '?11'
       WHERE id = '?1'
-    `)
-      .bind(1, post.id)
-      .bind(2, post.title)
-      .bind(3, post.content)
-      .bind(4, post.slug)
-      .bind(5, post.datetime)
-      .bind(6, post.modified)
-      .bind(7, post.type)
-      .bind(8, post.categories)
-      .bind(9, post.tags)
-      .bind(10, post.excerpt)
-      .bind(11, post.featured_image);
+    `).bind( post.id, post.title, post.content, post.slug, post.datetime, post.modified, post.type, post.categories, post.tags, post.excerpt, post.featured_image );
 
   try {
     const result = await statement.run();
