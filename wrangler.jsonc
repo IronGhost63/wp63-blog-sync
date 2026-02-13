@@ -28,14 +28,14 @@
   "queues": {
     "producers": [
       {
-        "binding": "MY_QUEUE",
+        "binding": "QUEUE",
         "queue": "blog-sync"
       }
     ],
     "consumers": [
       {
         "queue": "blog-sync",
-        "max_batch_size": 10,
+        "max_batch_size": 3,
         "dead_letter_queue": "blog-sync-dead"
       }
     ]
