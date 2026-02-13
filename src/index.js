@@ -42,7 +42,12 @@ export default {
 				text: 'hello world'
 			}
 
-			ctx.waitUntil( await env.SYNC_QUEUE.send(payload) );
+			try {
+				await env.SYNC_QUEUE.send(payload)
+			} catch (e) {
+				const message = e instanceof Error ? e.message : "Unknown error";
+      	console.error(`failed to send to the queue: ${message}`);
+			}
 
 			console.log(`payload: ${JSON.stringify(payload)}`)
 			// ctx.waitUntil(env.QUEUE.send(post));
