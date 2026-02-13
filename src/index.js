@@ -32,14 +32,14 @@ export default {
       return;
     }
 
+    const postList = await response.json();
+
     const messages = postList.map( (post) => {
       return {
         id: post.id,
         text: 'hello world'
       }
     });
-
-    const postList = await response.json();
 
     await env.SYNC_QUEUE.sendBatch( messages );
 
