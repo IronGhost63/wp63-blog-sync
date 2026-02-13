@@ -39,7 +39,7 @@ const sendToQueue = async () => {
 const insertPost = async (post) => {
   const statement = env.DB.prepare(`
       INSERT INTO web_posts ('id', 'title', 'content', 'slug', 'datetime', 'modified', 'type', 'categories', 'tags', 'excerpt', 'featured_image')
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);
+      VALUES (?1, '?2', '?3', '?4', '?5', '?6', '?7', '?8', '?9', '?10', '?11');
     `)
       .bind(1, post.id)
       .bind(2, post.title)
@@ -66,17 +66,17 @@ const updatePost = async (post) => {
   const statement = env.db.prepare(`
       UPDATE web_posts
       SET
-        title = ?2,
-        content = ?3,
-        slug = ?4,
-        datetime = ?5,
-        modified = ?6,
-        type = ?7,
-        categories = ?8,
-        tags = ?9,
-        excerpt = ?10,
-        featured_image = ?11
-      WHERE id = ?1
+        title = '?2',
+        content = '?3',
+        slug = '?4',
+        datetime = '?5',
+        modified = '?6',
+        type = '?7',
+        categories = '?8',
+        tags = '?9',
+        excerpt = '?10',
+        featured_image = '?11'
+      WHERE id = '?1'
     `)
       .bind(1, post.id)
       .bind(2, post.title)
