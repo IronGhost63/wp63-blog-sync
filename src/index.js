@@ -125,7 +125,7 @@ const savePost = async ( postId ) => {
   if ( !row ) {
     await insertPost(post);
   } else if ( row && post.modified !== row.modified) {
-    // await updatePost(post);
+    await updatePost(post);
   }
 }
 
