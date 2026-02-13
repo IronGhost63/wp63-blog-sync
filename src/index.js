@@ -37,10 +37,6 @@ const sendToQueue = async () => {
 }
 
 const insertPost = async (post) => {
-  console.log(JSON.stringify(post));
-
-  return;
-
   const statement = env.DB.prepare(`
       INSERT INTO web_posts ('id', 'title', 'content', 'slug', 'datetime', 'modified', 'type', 'categories', 'tags', 'excerpt', 'featured_image')
       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);
@@ -112,7 +108,7 @@ const savePost = async ( postId ) => {
   const row = await statement.first();
 
   const post = {
-    ID: data.id,
+    id: data.id,
     title: data.title.rendered,
     content: data.content.rendered,
     slug: data.slug,
