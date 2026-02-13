@@ -34,30 +34,30 @@ export default {
 
     const postList = await response.json();
 
-    await env.SYNC_QUEUE.send( postList );
+    await env.SYNC_QUEUE.bachSend( postList );
 
-    postList.forEach( async (post) => {
-      console.log('prep');
+    // postList.forEach( async (post) => {
+    //   console.log('prep');
 
-      try {
-        console.log('sending');
+    //   try {
+    //     console.log('sending');
 
-        const payload = {
-          id: post.id,
-          text: 'hello world'
-        }
+    //     const payload = {
+    //       id: post.id,
+    //       text: 'hello world'
+    //     }
 
-        await env.SYNC_QUEUE.send(payload);
+    //     await env.SYNC_QUEUE.send(payload);
 
-        console.log(`payload: ${JSON.stringify(payload)}`);
-      } catch (e) {
-        const message = e instanceof Error ? e.message : "Unknown error";
+    //     console.log(`payload: ${JSON.stringify(payload)}`);
+    //   } catch (e) {
+    //     const message = e instanceof Error ? e.message : "Unknown error";
 
-        console.error(`failed to send to the queue: ${message}`);
-      }
+    //     console.error(`failed to send to the queue: ${message}`);
+    //   }
 
-      // ctx.waitUntil(env.QUEUE.send(post));
-    });
+    //   // ctx.waitUntil(env.QUEUE.send(post));
+    // });
 
     console.log(`data sent to queue`);
   },
