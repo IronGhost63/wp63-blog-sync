@@ -37,6 +37,10 @@ const sendToQueue = async () => {
 }
 
 const insertPost = async (post) => {
+  console.logg(JSON.stringify(post));
+
+  return;
+
   const statement = env.DB.prepare(`
       INSERT INTO web_posts ('id', 'title', 'content', 'slug', 'datetime', 'modified', 'type', 'categories', 'tags', 'excerpt', 'featured_image')
       VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);
