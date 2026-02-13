@@ -40,7 +40,8 @@ export default {
 	},
 
 	async queue( batch, env, ctx ) {
-		const {message} = batch;
-		console.log( `queue triggered: ${message.body.id}`);
+    for (const message of batch.messages) {
+      console.log( `queue triggered: ${message.body.id}`);
+    }
 	}
 };
