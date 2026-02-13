@@ -36,23 +36,35 @@ const sendToQueue = async () => {
   console.log(`data sent to queue: ${JSON.stringify(postList)}`);
 }
 
+const insertPost = async (data) => {
+
+}
+
+const updatePost = async (data) => {
+
+}
+
 const savePost = async ( postId ) => {
   const api = `https://cms.jirayu.in.th/wp-json/wp/v2/posts/${postId}`;
   const response = await fetch( api );
   const data = await response.json();
 
-  console.log(`fetch ${postId} - ${data.title.rendered}`);
-
   const statement = env.DB.prepare('SELECT ID from `web_posts` WHERE `ID` = ?').bind(postId);
   const savedId = await statement.first('ID');
 
-  console.log(savedId ?? `not exists`);
+  if ( !savedId ) {
+    await insertPost(data);
+  } else {
+    await updatePost(data);
+  }
 }
 
 export default {
   async fetch(req, env, ctx) {
     const lastFetch = env.KV.get('lastFetch') ?? 0;
     const current = Math.floor((Date.now()) / 1000);
+
+    console.log(`last: ${lastFetch} / now: ${current}`);
 
     if ( current - lastFetch <= 30 ) {
       return Response.json({
