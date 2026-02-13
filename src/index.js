@@ -23,7 +23,9 @@ export default {
 	// The scheduled handler is invoked at the interval set in our wrangler.jsonc's
 	// [[triggers]] configuration.
 	async scheduled(event, env, ctx) {
-		const response = await this.fetch('https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100');
+		const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
+		console.log( url );
+		const response = await this.fetch(url);
 
 		if ( !response.ok ) {
 			console.log('Failed to retrieve post list');
