@@ -124,6 +124,8 @@ const savePost = async ( postId ) => {
     meta: '',
   }
 
+  return;
+
   if ( !row ) {
     await insertPost(post);
   } else if ( row && post.modified !== row.modified) {
