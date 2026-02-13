@@ -37,11 +37,66 @@ const sendToQueue = async () => {
 }
 
 const insertPost = async (post) => {
+  const statement = env.DB.prepare(`
+      INSERT INTO web_posts ('id', 'title', 'content', 'slug', 'datetime', 'modified', 'type', 'categories', 'tags', 'excerpt', 'featured_image')
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);
+    `)
+      .bind(1, post.id)
+      .bind(2, post.title)
+      .bind(3, post.content)
+      .bind(4, post.slug)
+      .bind(5, post.datetime)
+      .bind(6, post.modified)
+      .bind(7, post.type)
+      .bind(8, post.categories)
+      .bind(9, post.tags)
+      .bind(10, post.excerpt)
+      .bind(11, post.featured_image);
 
+  try {
+    const result = await statement.run();
+
+    console.log(`post ${post.id} is inserted`);
+  } catch(e) {
+    console.log(`unable to insert: ${JSON.stringify(e)}`)
+  }
 }
 
 const updatePost = async (post) => {
+  const statement = env.db.prepare(`
+      UPDATE web_posts
+      SET
+        title = ?2,
+        content = ?3,
+        slug = ?4,
+        datetime = ?5,
+        modified = ?6,
+        type = ?7,
+        categories = ?8,
+        tags = ?9,
+        excerpt = ?10,
+        featured_image = ?11
+      WHERE id = ?1
+    `)
+      .bind(1, post.id)
+      .bind(2, post.title)
+      .bind(3, post.content)
+      .bind(4, post.slug)
+      .bind(5, post.datetime)
+      .bind(6, post.modified)
+      .bind(7, post.type)
+      .bind(8, post.categories)
+      .bind(9, post.tags)
+      .bind(10, post.excerpt)
+      .bind(11, post.featured_image);
 
+  try {
+    const result = await statement.run();
+
+    console.log(`post ${post.id} is updated`);
+  } catch(e) {
+    console.log(`unable to update: ${JSON.stringify(e)}`)
+  }
 }
 
 const savePost = async ( postId ) => {
@@ -49,8 +104,8 @@ const savePost = async ( postId ) => {
   const response = await fetch( api );
   const data = await response.json();
 
-  const statement = env.DB.prepare('SELECT ID from `web_posts` WHERE `ID` = ?').bind(postId);
-  const savedId = await statement.first('ID');
+  const statement = env.DB.prepare('SELECT ID, modified from `web_posts` WHERE `ID` = ?').bind(postId);
+  const row = await statement.first();
 
   const post = {
     ID: data.id,
@@ -67,11 +122,9 @@ const savePost = async ( postId ) => {
     meta: '',
   }
 
-  console.log(`payload: ${JSON.stringify(post)}`);
-
-  if ( !savedId ) {
+  if ( !row ) {
     await insertPost(post);
-  } else {
+  } else if ( row && post.modified !== row.modified) {
     await updatePost(post);
   }
 }
