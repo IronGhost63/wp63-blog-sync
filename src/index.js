@@ -36,11 +36,11 @@ const sendToQueue = async () => {
   console.log(`data sent to queue: ${JSON.stringify(postList)}`);
 }
 
-const insertPost = async (data) => {
+const insertPost = async (post) => {
 
 }
 
-const updatePost = async (data) => {
+const updatePost = async (post) => {
 
 }
 
@@ -52,10 +52,27 @@ const savePost = async ( postId ) => {
   const statement = env.DB.prepare('SELECT ID from `web_posts` WHERE `ID` = ?').bind(postId);
   const savedId = await statement.first('ID');
 
+  const post = {
+    ID: data.id,
+    title: data.title.rendered,
+    content: data.content.rendered,
+    slug: data.slug,
+    datetime: data.date_gmt,
+    modified: data.modified_gmt,
+    type: 'post',
+    categories: data.categories.join(','),
+    tags:  data.tags.join(','),
+    excerpt: data.excerpt.rendered,
+    featured_image: data.jetpack_featured_media_url,
+    meta: '',
+  }
+
+  console.log(`payload: ${JSON.stringify(post)}`);
+
   if ( !savedId ) {
-    await insertPost(data);
+    await insertPost(post);
   } else {
-    await updatePost(data);
+    await updatePost(post);
   }
 }
 
