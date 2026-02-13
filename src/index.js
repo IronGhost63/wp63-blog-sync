@@ -64,7 +64,7 @@ export default {
 
   async queue( batch, env, ctx ) {
     for (const message of batch.messages) {
-      console.log( `queue triggered: ${message.body.id}`);
+      console.log( `queue triggered: ${JSON.stringify(message.body)}`);
     }
   }
 };
