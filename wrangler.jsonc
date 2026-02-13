@@ -17,7 +17,23 @@
 	},
 	"compatibility_flags": [
 		"nodejs_compat"
-	]
+	],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "blog-jirayu",
+      "database_id": "e4a0da2c-4a9b-4802-b5e2-3ee9db1dc5bd"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "QUEUE",
+        "queue": "blog-sync",
+        "delivery_delay": 5 // Delay messages by 60 seconds before they are delivered to a consumer
+      }
+    ]
+  }
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

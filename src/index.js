@@ -23,15 +23,22 @@ export default {
 	// The scheduled handler is invoked at the interval set in our wrangler.jsonc's
 	// [[triggers]] configuration.
 	async scheduled(event, env, ctx) {
-		// A Cron Trigger can make requests to other endpoints on the Internet,
-		// publish to a Queue, query a D1 Database, and much more.
-		//
-		// We'll keep it simple and make an API call to a Cloudflare API:
-		let resp = await fetch('https://api.cloudflare.com/client/v4/ips');
-		let wasSuccessful = resp.ok ? 'success' : 'fail';
+		const response = await this.fetch('https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100');
 
-		// You could store this result in KV, write to a D1 Database, or publish to a Queue.
-		// In this template, we'll just log the result:
-		console.log(`trigger fired at ${event.cron}: ${wasSuccessful}`);
+		if ( !response.ok ) {
+			console.log('Failed to retrieve post list');
+
+			return;
+		}
+
+		const postList = await response.json();
+
+		postList.forEach( async (post) => await env.QUEUE.send(post));
 	},
+
+	async queued( batch, env, ctx ) {
+		const {message} = batch;
+
+		console.log(message.body.id);
+	}
 };
