@@ -35,10 +35,14 @@ export default {
 		const postList = await response.json();
 
 		postList.forEach( async (post) => {
-			await env.SYNC_QUEUE.send({
+			const payload = {
 				id: post.id,
 				text: 'hello world'
-			});
+			}
+
+			await env.SYNC_QUEUE.send(payload);
+
+			console.log(`payload: ${JSON.stringify(payload)}`)
 			// ctx.waitUntil(env.QUEUE.send(post));
 		});
 
