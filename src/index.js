@@ -36,7 +36,7 @@ export default {
 		postList.forEach( async (post) => await env.QUEUE.send(post));
 	},
 
-	async queued( batch, env, ctx ) {
+	async queue( batch, env, ctx ) {
 		const {message} = batch;
 
 		console.log(message.body.id);
