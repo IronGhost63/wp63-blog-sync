@@ -29,8 +29,7 @@
     "producers": [
       {
         "binding": "QUEUE",
-        "queue": "blog-sync",
-        "delivery_delay": 10
+        "queue": "blog-sync"
       }
     ]
   }
