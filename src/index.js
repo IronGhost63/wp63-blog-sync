@@ -42,6 +42,11 @@ const savePost = async ( postId ) => {
   const data = await response.json();
 
   console.log(`fetch ${postId} - ${data.title.rendered}`);
+
+  const statement = env.DB.prepare('SELECT ID from `web_posts` WHERE `ID` = ?').bind(postId);
+  const savedId = await statement.first('ID');
+
+  console.log(savedId ?? `not exists`);
 }
 
 export default {
