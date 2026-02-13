@@ -106,7 +106,7 @@ const savePost = async ( postId ) => {
 
   console.log( `post id: ${postId}`);
 
-  const statement = env.DB.prepare('SELECT ID, modified from `web_posts` WHERE `ID` = ?').bind(postId);
+  const statement = env.DB.prepare('SELECT ID, modified from `web_posts` WHERE `ID` = 1').bind(postId);
   const row = await statement.first();
 
   const post = {
