@@ -42,7 +42,7 @@ export default {
 				text: 'hello world'
 			}
 
-			await env.SYNC_QUEUE.send(payload);
+			ctx.waitUntil( await env.SYNC_QUEUE.send(payload) );
 
 			console.log(`payload: ${JSON.stringify(payload)}`)
 			// ctx.waitUntil(env.QUEUE.send(post));
