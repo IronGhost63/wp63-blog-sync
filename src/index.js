@@ -35,7 +35,7 @@ export default {
 		const postList = await response.json();
 
 		postList.forEach( async (post) => {
-			await env.QUEUE.send({
+			await env.SYNC_QUEUE.send({
 				id: post.id,
 				text: 'hello world'
 			});

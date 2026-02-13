@@ -28,7 +28,7 @@
   "queues": {
     "producers": [
       {
-        "binding": "QUEUE",
+        "binding": "SYNC_QUEUE",
         "queue": "blog-sync"
       }
     ],
