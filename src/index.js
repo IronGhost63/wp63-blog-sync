@@ -34,10 +34,10 @@ export default {
 
     const postList = await response.json();
 
+    await env.SYNC_QUEUE.send( postList );
+
     postList.forEach( async (post) => {
       console.log('prep');
-
-
 
       try {
         console.log('sending');
