@@ -35,6 +35,8 @@ export default {
 		const postList = await response.json();
 
 		postList.forEach( async (post) => {
+			console.log('prep');
+
 			const payload = {
 				id: post.id,
 				text: 'hello world'
@@ -46,7 +48,7 @@ export default {
 			// ctx.waitUntil(env.QUEUE.send(post));
 		});
 
-		console.log(`data sent to queue: ${JSON.stringify(postList)}`);
+		console.log(`data sent to queue`);
 	},
 
 	async queue( batch, env, ctx ) {
