@@ -61,7 +61,7 @@ const savePost = async ( postId ) => {
 
 export default {
   async fetch(req, env, ctx) {
-    const lastFetch = env.KV.get('lastFetch') ?? 0;
+    const lastFetch = await env.KV.get('lastFetch') ?? 0;
     const current = Math.floor((Date.now()) / 1000);
 
     console.log(`last: ${lastFetch} / now: ${current}`);
