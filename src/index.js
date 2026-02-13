@@ -104,8 +104,6 @@ const savePost = async ( postId ) => {
   const response = await fetch( api );
   const data = await response.json();
 
-  console.log( `post id: ${postId}`);
-
   const statement = env.DB.prepare('SELECT ID, modified from `web_posts` WHERE `ID` = ?').bind(postId);
   const row = await statement.first();
 
@@ -124,12 +122,10 @@ const savePost = async ( postId ) => {
     meta: '',
   }
 
-  return;
-
   if ( !row ) {
     await insertPost(post);
   } else if ( row && post.modified !== row.modified) {
-    await updatePost(post);
+    // await updatePost(post);
   }
 }
 
