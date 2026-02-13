@@ -13,55 +13,58 @@
  */
 
 export default {
-	async fetch(req) {
-		const url = new URL(req.url)
-		url.pathname = "/__scheduled";
-		url.searchParams.append("cron", "* * * * *");
-		return new Response(`To test the scheduled handler, ensure you have used the "--test-scheduled" then try running "curl ${url.href}".`);
-	},
+  async fetch(req) {
+    const url = new URL(req.url)
+    url.pathname = "/__scheduled";
+    url.searchParams.append("cron", "* * * * *");
+    return new Response(`To test the scheduled handler, ensure you have used the "--test-scheduled" then try running "curl ${url.href}".`);
+  },
 
-	// The scheduled handler is invoked at the interval set in our wrangler.jsonc's
-	// [[triggers]] configuration.
-	async scheduled(event, env, ctx) {
-		const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
-		const response = await fetch(url);
+  // The scheduled handler is invoked at the interval set in our wrangler.jsonc's
+  // [[triggers]] configuration.
+  async scheduled(event, env, ctx) {
+    const url = 'https://cms.jirayu.in.th/wp-json/wp/v2/posts?_fields=id&per_page=100';
+    const response = await fetch(url);
 
-		if ( !response.ok ) {
-			console.log('Failed to retrieve post list');
+    if ( !response.ok ) {
+      console.log('Failed to retrieve post list');
 
-			return;
-		}
+      return;
+    }
 
-		const postList = await response.json();
+    const postList = await response.json();
 
-		postList.forEach( async (post) => {
-			console.log('prep');
+    postList.forEach( async (post) => {
+      console.log('prep');
 
-			const payload = {
-				id: post.id,
-				text: 'hello world'
-			}
 
-			try {
-				console.log('sending');
 
-				await env.SYNC_QUEUE.send(payload);
-			} catch (e) {
-				const message = e instanceof Error ? e.message : "Unknown error";
+      try {
+        console.log('sending');
 
-      	console.error(`failed to send to the queue: ${message}`);
-			}
+        const payload = {
+          id: post.id,
+          text: 'hello world'
+        }
 
-			console.log(`payload: ${JSON.stringify(payload)}`)
-			// ctx.waitUntil(env.QUEUE.send(post));
-		});
+        await env.SYNC_QUEUE.send(payload);
 
-		console.log(`data sent to queue`);
-	},
+        console.log(`payload: ${JSON.stringify(payload)}`);
+      } catch (e) {
+        const message = e instanceof Error ? e.message : "Unknown error";
 
-	async queue( batch, env, ctx ) {
+        console.error(`failed to send to the queue: ${message}`);
+      }
+
+      // ctx.waitUntil(env.QUEUE.send(post));
+    });
+
+    console.log(`data sent to queue`);
+  },
+
+  async queue( batch, env, ctx ) {
     for (const message of batch.messages) {
       console.log( `queue triggered: ${message.body.id}`);
     }
-	}
+  }
 };
