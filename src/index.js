@@ -63,7 +63,7 @@ const insertPost = async (post) => {
 }
 
 const updatePost = async (post) => {
-  const statement = env.db.prepare(`
+  const statement = env.DB.prepare(`
       UPDATE web_posts
       SET
         title = '?2',
