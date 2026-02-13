@@ -37,7 +37,7 @@ const sendToQueue = async () => {
 }
 
 const insertPost = async (post) => {
-  console.logg(JSON.stringify(post));
+  console.log(JSON.stringify(post));
 
   return;
 
