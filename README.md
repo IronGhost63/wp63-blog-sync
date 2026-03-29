@@ -1,21 +1,4 @@
-```txt
-npm install
-npm run dev
-```
+# WordPress > Cloudflare D1 Sync
+This worker is for synching posts from WordPress to Cloudflare D1 Database.
 
-```txt
-npm run deploy
-```
-
-[For generating/synchronizing types based on your Worker configuration run](https://developers.cloudflare.com/workers/wrangler/commands/#types):
-
-```txt
-npm run cf-typegen
-```
-
-Pass the `CloudflareBindings` as generics when instantiation `Hono`:
-
-```ts
-// src/index.ts
-const app = new Hono<{ Bindings: CloudflareBindings }>()
-```
+[Static Site Generator](https://github.com/IronGhost63/astro-blog) will query this database instead of pulling from WordPress API to reduce load on WordPress Website
