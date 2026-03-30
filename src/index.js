@@ -25,7 +25,7 @@ app.get("/sync", async (c) => {
 });
 
 app.get("/contents", bearerAuth({ token: env.API_KEY }), async (c) => {
-  const { results } = await env.DB.prepare('SELECT * FROM web_posts').run();
+  const { results } = await env.DB.prepare('SELECT * FROM web_posts ORDER BY datetime DESC').run();
 
   return c.json({
     posts: results
